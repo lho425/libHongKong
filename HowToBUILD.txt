@@ -1,0 +1,4 @@
+srcディレクトリに移動して
+./build.sh
+を実行
+すると、libHongKong.dllがsrcにできる

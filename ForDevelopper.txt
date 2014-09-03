@@ -1,0 +1,11 @@
+[命名規則]
+ライブラリ使用者向け(published api) : キャメルケース
+ライブラリ内部で使われるクラス、関数群 : _ 区切り
+ノリで書いてしまったため、こんな感じになっています
+
+Q. ftdi_proprietary ディレクトリはなんですか？
+A. http://www.ftdichip.com/Drivers/D2XX.htmからダウンロードしたZIPファイル(CDM*.zip)を解答し名前をftdi_proprietaryに変えたものです。
+上のURLに
+"FTDI drivers may be distributed in any form as long as license information is not modified."
+とあるので、ライセンスを変更せずにgithubにアップロードしています。
+が、元のライセンスは不明です。

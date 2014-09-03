@@ -1,0 +1,4 @@
+HongKong -----> mem_ops ----->Ch ----->lowlevel_IO ----->FTbuf_Writer ------>FTbuf
+							                       |
+							    FTbuf_Reader------>|							       
+						      
