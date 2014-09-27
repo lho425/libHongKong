@@ -1,4 +1,5 @@
 srcディレクトリに移動して
-./build.sh
+cmake .
+make
 を実行
 すると、libHongKong.dllがsrcにできる

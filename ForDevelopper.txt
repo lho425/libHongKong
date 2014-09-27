@@ -9,3 +9,11 @@ A. http://www.ftdichip.com/Drivers/D2XX.htmからダウンロードしたZIPフ�
 "FTDI drivers may be distributed in any form as long as license information is not modified."
 とあるので、ライセンスを変更せずにgithubにアップロードしています。
 が、元のライセンスは不明です。
+
+
+[クラス関係概略]
+
+       | -----> HongKongBase -----> mem_ops ----->Ch ----->lowlevel_IO ----->FTbuf_Writer ------>FTbuf
+HongKong                                                                               |
+       |----------------------------------------------------------> FTbuf_Reader------>|
+                              
