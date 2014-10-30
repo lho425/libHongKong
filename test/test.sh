@@ -1,6 +1,6 @@
 #!/bin/bash
 # This file is public domain.
-(cd ../src && ./build.sh )&&
+(cd ../src && cmake . && make )&&
 cp ../src/libHongKong.dll ./ &&
 
 echo '#hk_sim_test#' &&
