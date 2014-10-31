@@ -55,7 +55,7 @@ public:
 
     virtual void set_read_enable() = 0;
 
-    virtual unsigned char read();
+    virtual unsigned char read() const;
 
     virtual void set_ROM_type(int type) = 0;
 
@@ -93,8 +93,8 @@ public:
         : mem_ops(std::move(m_pos) ) {
     }
 
-    HongKongBase(HongKongBase &&) = default;
-    HongKongBase& operator=(HongKongBase &&) = default;
+    HongKongBase(HongKongBase &&) = default;//fixme!!!
+    HongKongBase& operator=(HongKongBase &&) = default;//fixme!!!
 
     HongKongBase(HongKongBase &) = delete;
     HongKongBase& operator=(HongKongBase &) = delete;

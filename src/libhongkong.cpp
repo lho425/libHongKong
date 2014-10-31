@@ -33,7 +33,7 @@ this Program grant you additional permission to convey the resulting work.
 
 #include "libHongKong.h"
 
-unsigned char memory_operetions::read() {
+unsigned char memory_operetions::read() const {
     return ch->in();
 }
 

@@ -43,8 +43,8 @@ public:
     }
 
 
-    void out(int ch, unsigned char data) const;
-    unsigned char in() const ;
+    void out(int ch, unsigned char data);
+    unsigned char in();
 };
 
 
