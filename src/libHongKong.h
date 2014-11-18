@@ -96,8 +96,8 @@ public:
     HongKongBase(HongKongBase &&) = default;//fixme!!!
     HongKongBase& operator=(HongKongBase &&) = default;//fixme!!!
 
-    HongKongBase(HongKongBase &) = delete;
-    HongKongBase& operator=(HongKongBase &) = delete;
+    HongKongBase(HongKongBase &) = default;
+    HongKongBase& operator=(HongKongBase &) = default;
 
     virtual
     ~HongKongBase() = default;

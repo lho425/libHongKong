@@ -114,15 +114,10 @@ lowlevel_IO_D2XX::~lowlevel_IO_D2XX() {
 }
 
 /*******IO operetions****/
-void lowlevel_IO_D2XX::write_sub_4bit(unsigned char data) {
-    
-    return write_sub_8bit(data & 0x0F);
-    //7 6 5 4 3 2 1 0  <-ADBUS = data
-    //3 2 1 0          <-GPIOL
 
-}
 
 void lowlevel_IO_D2XX::write_sub_8bit(unsigned char data) {
+    //7 6 5 4 3 2 1 0  <-ADBUS = data
     unsigned char buf[] = {
         0x80,
         data,
@@ -164,31 +159,24 @@ unsigned char lowlevel_IO_D2XX::read() {
 
 /*******IO operetions****/
 
-int lowlevel_IO_simulator::sub4bit_to_ch(unsigned char sub4bit) {
-    //GOIOL1..3 are the ch select bit.
-    //See HongKong_FT232R electrical diagram and 74HC138 ligic table.
-
-    //HongKong_FT232R の回路図と74HC138の論理表を参照
-
-    sub4bit = sub4bit & 0x0F;
-
-    if (sub4bit != 0) {
-        return (8 -
-                (sub4bit >> 1)
-                );
 
 
-    }
-    return 0;
-}
-
-void lowlevel_IO_simulator::write_sub_4bit(unsigned char data) {
-	//data is current sub4bit.
-    int ch = sub4bit_to_ch(data);
-    if (sub4bit_to_ch(_prev_sub4bit) == ch && (_prev_sub4bit & 1) == 1 && (data & 1) ==0)//チャンネルが前と同じで、1bit目が1から0に変わってたら永続化する
-    	_ch_data[ch] = _ch_data_not_persisted;
+void lowlevel_IO_simulator::write_sub_8bit(unsigned char data) {
     
-    _prev_sub4bit = data;
+    
+    //sub_8bit: ch0.dir, ch0.!oe, ch1.ck, ch2.ck, ...  ch7.ck
+    unsigned char &current_sub_8bit = data;//data is current sub8bit.
+    unsigned char prev_sub8bit = _sub8bit;
+    //0->1になってるビットのチャンネルを永続化する
+    unsigned char ck_keep_specified_bits = (~prev_sub8bit) & current_sub_8bit;
+    
+    for(int ch = 1; ch <= 4; ch++){
+        if(ck_keep_specified_bits & (0b01000000>>ch) ){
+            _ch_data[ch] = _ch_data_not_persisted;
+        }
+    }
+    
+    _sub8bit = current_sub_8bit;
 }
 
 void lowlevel_IO_simulator::write(unsigned char data) {
@@ -203,7 +191,15 @@ unsigned char lowlevel_IO_simulator::read() {
     unsigned int addr = 0;
     unsigned char buf;
     // if OE? CE? LoROM?
-
+    
+    //sub_8bit: ch0.dir, ch0.!oe, ch1.ck, ch2.ck, ...  ch7.ck
+    if( (_sub8bit & 0b01000000) != 0 ){//ch0.!oe !=0 so ch0 is not enable
+        return 0;
+    }
+    
+    if( (_sub8bit & 0b10000000) != 0 ){//ch0.dir !=0 so ch0 is output mode
+        throw string("direction od ch0 is output, but you read ch0!");
+    }
     //A0...A20
     addr += _ch_data[1] << 0 * 8;
     addr += _ch_data[2] << 1 * 8;

@@ -17,7 +17,7 @@ using namespace std;
 class lowlevel_IO
 {
 public:
-	virtual void write_sub_4bit(unsigned char data) = 0;
+	virtual void write_sub_8bit(unsigned char data) = 0;
 	virtual void write(unsigned char data) = 0;
 	virtual unsigned char read() = 0;
 
@@ -34,7 +34,7 @@ class DUMMY_lowIO : public lowlevel_IO
 public:
 
 	void
-	write_sub_4bit(unsigned char data)
+	write_sub_8bit(unsigned char data)
 	{
 	};
 
@@ -54,7 +54,7 @@ class DUMMY_EXCEPTION_lowIO : public lowlevel_IO
 {
 
 	void
-	write_sub_4bit(unsigned char data)
+	write_sub_8bit(unsigned char data)
 	{
 	};
 
@@ -83,17 +83,16 @@ public:
 class lowlevel_IO_simulator : public lowlevel_IO
 {
 private:
-	int _prev_sub4bit;
+	int _sub8bit;
 	unsigned char _ch_data_not_persisted;
 	unsigned char _ch_data[8];
-	int sub4bit_to_ch(unsigned char sub4bit);
 	std::fstream ROM_img;
 	int open_ROM_Image_File();
 	int setup_lowlevel_IO_func_ptr();
 	int close_ROM_Image_File();
 
 public:
-	void write_sub_4bit(unsigned char data);
+	void write_sub_8bit(unsigned char data);
 	void write(unsigned char data);
 	unsigned char read();
 
@@ -131,13 +130,11 @@ public:
 	virtual ~lowlevel_IO_D2XX();
 
 
-	void write_sub_4bit(unsigned char data);
+	void write_sub_8bit(unsigned char data);
 
 	void write(unsigned char data);
 
 	unsigned char read();
-
-	void write_sub_8bit(unsigned char data) ;
 		
 };
 

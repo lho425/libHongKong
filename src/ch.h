@@ -34,7 +34,6 @@ this Program grant you additional permission to convey the resulting work.
 class channel {
     std::unique_ptr<lowlevel_IO> lowIO;
     
-    static unsigned char ch_to_sub_4bit(int ch);
 
 public:
     channel(lowlevel_IO * lio) : lowIO(lio)

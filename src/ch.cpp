@@ -30,42 +30,26 @@ this Program grant you additional permission to convey the resulting work.
 #include "ch.h"
 #include "lowlevel_io.h"
 
-unsigned char channel::ch_to_sub_4bit(int ch){
-    //GOIOL1..3 are the ch select bit.
-    //See HongKong_FT232R electrical diagram and 74HC138 ligic table.
-    
-    //HongKong_FT232R の回路図と74HC138の論理表を参照
-/*
-	unsigned char c;//cbus_4bit_data;
-	switch(ch){
-	case 1:
-		c = 7<<1;
-		break;
-	case 2:
-		c=6<<1
-		break;
-	//THIS IS FOOL!
-*/
-	if(ch>0){
-		return (8- ch)<<1;//THIS IS COOL!
-	}else{//ch==0
-		return 0;
-	}
-}
-
 
 
 
 void channel::out(int ch, unsigned char data){
-	unsigned char _ch = ch_to_sub_4bit(ch) & 0xFE;//1110
-	lowIO->write_sub_4bit(_ch | 1);//ck=Low. select ch.
-	lowIO->write(data);//set output data
-	lowIO->write_sub_4bit(_ch | 0 );//ck=Hi. select ch and output data persistently.
-		//cbus0 bit is connected to CK bit of 74HCT574 on HongKong_FT232R.
+  unsigned char IC_select_bits=0b01000000;//dir,!oe, ck, ck, ...
+  if ( ch == 0 ){
+    IC_select_bits = 0b10000000;//dir=output, !oe=enable
+  }else{
+    IC_select_bits = 0b01000000 | IC_select_bits>>ch;
+    //!oe=disable, ch's ck=Hi. select ch and keep output data on ch channel IC.
+  }
+	  
+  lowIO->write_sub_8bit(0b01000000);//!oe=disable, ck=Low
+  lowIO->write(data);//set output data
+  lowIO->write_sub_8bit( IC_select_bits );//if ch>=1: keep data;if ch==0,simply output
+  
+
 }
 
 unsigned char channel::in(){
-	unsigned char _ch = ch_to_sub_4bit(0) & 0xFE;//1110
-	lowIO->write_sub_4bit(_ch | 0);//select ch0 and ch0 direction L (B->A). see74HCT245.
+	lowIO->write_sub_8bit(0b00000000);//select ch0 and ch0 direction L (B->A). see74HCT245.
 	return lowIO->read();
 }

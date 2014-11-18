@@ -227,10 +227,6 @@ public:
   virtual ~lowlevel_IO_FastIO() = default;
 
 
-	void write_sub_4bit(unsigned char data){
-	  Async_write_sub_4bit(data);
-	}
-
 	void write(unsigned char data){
 	  Async_write(data);
 	}
@@ -241,7 +237,7 @@ public:
 	  return static_cast<unsigned char>(Async_read() );
 	}
 
-	void write_sub_8bit(unsigned char data) //for debug.
+	void write_sub_8bit(unsigned char data) 
 	{
 	  Async_write_sub_8bit(data);
 	}
@@ -253,8 +249,6 @@ public:
 	
 
 	unsigned int Async_flush();
-
-	void Async_write_sub_4bit(unsigned char data);
 
 	void Async_write(unsigned char data);
 

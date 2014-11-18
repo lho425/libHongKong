@@ -97,9 +97,6 @@ void lowlevel_IO_FastIO::Async_write_sub_8bit(unsigned char uc){
   return ;
 }
 
-void lowlevel_IO_FastIO::Async_write_sub_4bit(unsigned char uc){
-  lowlevel_IO_FastIO::Async_write_sub_8bit(uc && 0b00001111);
-}
 
 void lowlevel_IO_FastIO::Async_write(unsigned char uc){
   unsigned char buf[] = {0x82,uc,0xFF};
